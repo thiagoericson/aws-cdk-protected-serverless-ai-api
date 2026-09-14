@@ -1,0 +1,1 @@
+# aws-cdk-protected-serverless-ai-api
