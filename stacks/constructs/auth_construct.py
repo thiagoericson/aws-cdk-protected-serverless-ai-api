@@ -1,4 +1,5 @@
 from aws_cdk import (
+    RemovalPolicy,
     aws_cognito as cognito,
     aws_apigatewayv2_authorizers as authorizers,
 )
@@ -15,9 +16,7 @@ class AuthConstruct(Construct):
             self_sign_up_enabled=True,
             auto_verify=cognito.AutoVerifiedAttrs(email=True),
             # 1. Set to DESTROY the resource when runs the `cdk destroy`, even with user data (DON'T USE THAT IN REAL PRODUCTION ENV)
-            removal_policy=RemovalPolicy.DESTROY,
-            # 2. Force the user data exclusion on destroy stack (DON'T USE THAT IN REAL PRODUCTION ENV)
-            auto_delete_users=True
+            removal_policy=RemovalPolicy.DESTROY
         )
 
         # Client da aplicação

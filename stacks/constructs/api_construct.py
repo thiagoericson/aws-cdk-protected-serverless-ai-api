@@ -15,7 +15,7 @@ SRC_DIR = str(Path(__file__).parent.parent / "src")
 class ApiConstruct(Construct):
     def __init__(
         self, scope: Construct, id: str, 
-        vpc: ec2.IVpc, authorizer, table, bucket, **kwargs
+        vpc: ec2.IVpc, authorizer, **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -38,9 +38,7 @@ class ApiConstruct(Construct):
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS),
             environment={
                 "GUARDRAIL_ID": guardrail_id,
-                "GUARDRAIL_VERSION": guardrail_version,
-                "TABLE_NAME": table.table_name,
-                "BUCKET_NAME": bucket.bucket_name
+                "GUARDRAIL_VERSION": guardrail_version
             }
         )
 
@@ -56,9 +54,6 @@ class ApiConstruct(Construct):
                 resources=["*"]
             )
         )
-
-        table.grant_read_write_data(self.handler)
-        bucket.grant_read_write(self.handler)
 
         # API Gateway HTTP com rota protegida por Cognito
         self.http_api = apigw.HttpApi(self, "ProtectedHttpApi")
